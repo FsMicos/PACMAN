@@ -1,0 +1,216 @@
+@startuml
+
+package logica {
+    abstract class Personaje {
+        # posiciónX : int
+        # posiciónY : int
+        # dirección : String
+        # direcciónImagen : String
+        + actualizar() : void
+        + run() : void
+        + estaColisionando() : boolean
+        + sePuedeMover(direcciónNueva : String) : boolean
+        + direcciónEsContraria(direcciónActual : String, direcciónNueva : String) : boolean
+        + moverse(dirección : String, velocidad : int) : void
+        + estaAlineado() : boolean
+    }
+    abstract class Fantasma {
+        # direcciónAnterior : String
+        # VELOCIDAD_HUIDA : int
+        + perseguir() : void
+        + huir() : void
+        + obtenerMejorDireccion(columna : String, fila : String) : Tecla
+        + obtenerDirecciónRandom(direcciónAnterior : Tecla) : Tecla
+        - obtenerMejorDireccionHuida() : Tecla
+        # estaColisionandoConJugador() : boolean
+        + {abstract} moverPorPersonalidad() : void
+    }
+    class Jugador {
+        - últimaDirección : String
+        - puntaje : int
+        - powerPellet : boolean
+        - DURACIÓN_POWER_PELLET : int
+        - obtenerItem() : void
+        - obtenerMovimiento() : String
+        - actualizarÚltimaDirección() : void
+        + tienePowerPellet() : boolean
+        + reaparecer(): void
+        + activarPowerPellet() : void
+    }
+    class ArchivoManager{
+        - archivo : File
+        - datosDelArchivo: ArrayList<String>
+        - puntuaciones: ArrayList<int>
+        - escritorArchivo: FileWriter
+        + guardarNombre(nombre: String, puntaje: int) : void
+        + guardarPuntacion(puntaje : int) : void
+        + escribirPuntaje(limite: int) : void
+        + leerArchivo(): ArrayList<String>
+        + obtenerHighScore(): int
+        + ordenarArchivo(nombre: String, puntaje: int): void
+        + ordenarDatos(): void
+        + guardarNivel(nivel: Nivel): void
+        + cargarNivel(): Nivel
+    }
+    class Pinky {
+    }
+    class Blinky {
+    }
+    class Clyde {
+    }
+    class Inky {
+    }
+    class Laberinto {
+        - mapa : int[][]
+        - cargarmapa(pathName : String) : void
+        + getValorMapa(fila : int, columna : int) : int
+        + cambiarValorA0(fila : int, columna : int) : int
+    }
+    class DetectorTeclas {
+        + dirección : String
+        + keyTyped(e : KeyEvent) : void
+    }
+    class Nivel {
+        - dificultad: Dificultad
+        - direccionMapa : String
+        - completado : boolean
+        - siguienteNivel : Nivel
+        - jugador: Jugador
+        + iniciarNivel(controles: DetectorTeclas)
+        + detener(): void
+        + terminar() : void
+    }
+    class PacMan {
+        - niveles: Nivel[]
+        + enlazarNiveles() : void
+        + reiniciarNiveles(): void
+
+    }
+    enum Dificultad {
+        FACIL,
+        MEDIA,
+        DIFICIL,
+        IMPOSIBLE
+    }
+    enum Tecla {
+        ARRIBA,
+        ABAJO,
+        DERECHA,
+        IZQUIERDA
+    }
+    enum Item {
+        PAC_DOT,
+        POWER_PELLET,
+        FRUTA
+    }
+}
+
+package presentacion {
+    abstract class InterfazGrafica {
+        # panel : PanelDelJuego
+        + dibujar(g2 : Graphics2D) : void
+        + run() : void
+        + obtenerImagen() : void
+    }
+    class InterfazGraficaDeFantasma {
+        - fantasmas: Fantasma
+        - spritesHuida: BufferedImage[]
+        - actualizar: boolean
+        + actualizar(): void
+    }
+    class InterfazGraficaDeJugador {
+
+    }
+    class InterfazGraficaDelMarco{
+        - jugador : Jugador
+        - laberinto : Laberinto
+        - imagenPacmanaSkin : BufferedImage
+        - fuentePacman : Font
+        + cargarFuente() : void
+        + cargarImagenes(): void
+    }
+    class InterfazGraficaDeLaberinto {
+         + pausar(): void
+         + despausar(): void
+    }
+    class MenuPacMan {
+        + colocarBotonos() : void
+        + colocarEtiquetas() : void
+    }
+    class ContenedorPacMan {
+        - controles : DetectorTeclas
+        - menu : MenuPacMan
+        - nivel : Nivel
+        - botonRegreso : Jbutton
+        + iniciar(nivel : Nivel) : void
+        + configurarBoton(): void
+        + reanudar(): void
+        + pausarInterfaz(): void
+        + pausarInterfaz(): void
+    }
+    class Puntuacion {
+        - archivo: File
+        - fuentePacman : Font
+        - menu: MenuPacMan
+        + cargarFuente(): void
+        + mostrarPunttuaciones(): void
+    }
+    class Sonido {
+        - sonidos : URL[]
+        - clip: Clip
+        + correrEnLoop(): void
+        + cargarSonidos(): void
+        + parar(): void
+        + reproducirEfecto(): void
+        + terminarSonido(): boolean
+        + obtenerSonidos(sonidos: Sonidos)
+        + obtenerUrl(nombreAudio: String): URL
+
+    }
+    enum Sonidos {
+        MENU,
+        MUERTE,
+        PARTIDA,
+        INICIO_PARTIDA,
+        POWER_UP
+    }
+}
+
+interface Runnable
+interface KeyListener
+
+'Relaciones entre paquetes
+presentacion ...> logica
+
+'Relaciones paquete logica
+Blinky --|> Fantasma
+Pinky --|> Fantasma
+Inky --|> Fantasma
+Clyde --|> Fantasma
+Fantasma --> "1" Jugador : jugador
+Personaje --> Laberinto
+Personaje --> "1" Tecla : dirección
+Personaje .|> Runnable
+Jugador --> ArchivoManager
+Jugador --> "1" DetectorTeclas : controles
+Jugador --|> Personaje
+Fantasma --|> Personaje
+DetectorTeclas ..|> KeyListener
+Nivel --> "1" Jugador : jugador
+Nivel --> "4" Fantasma : fantasmas
+Nivel --> "1" Laberinto : laberinto
+Nivel -> Dificultad
+PacMan --> "*" Nivel : niveles
+
+'Relaciones paquete presentación
+InterfazGraficaDeFantasma --|> InterfazGrafica
+InterfazGraficaDelMarco --|> InterfazGrafica
+InterfazGraficaDeJugador --|> InterfazGrafica
+InterfazGraficaDeLaberinto --|> InterfazGrafica
+InterfazGraficaDeLaberinto ..|> Runnable
+MenuPacMan --> "1" Puntuacion
+MenuPacMan --> "*" InterfazGrafica
+MenuPacMan --> "1" ContenedorPacMan
+MenuPacMan --> "1" Sonido
+
+@enduml

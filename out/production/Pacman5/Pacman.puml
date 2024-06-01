@@ -1,0 +1,128 @@
+@startuml
+
+package logica {
+    interface Runnable {
+    }
+    abstract class Personaje {
+        # posiciónX : int
+        # posiciónY : int
+        # dirección : String
+        # direcciónImagen : String
+        + actualizar() : void
+        + run() : void
+        + estaColisionando() : boolean
+        + sePuedeMover(direcciónNueva : String) : boolean
+        + direcciónEsContraria(direcciónActual : String, direcciónNueva : String) : boolean
+        + moverse(dirección : String, velocidad : int) : void
+        + estaAlineado() : boolean
+    }
+    abstract class Fantasma {
+        # direcciónAnterior : String
+        # VELOCIDAD_HUIDA : int
+        + perseguir() : void
+        + huir() : void
+        + obtenerMovimientoÓptimo(direcciónAnterior : String) : String
+        + obtenerDirecciónRandom(direcciónAnterior : String) : String
+    }
+    class Jugador {
+        - últimaDirección : String
+        - puntaje : int
+        - powerPellet : boolean
+        - DURACIÓN_POWER_PELLET : int
+        - obtenerItem() : void
+        - obtenerMovimiento() : String
+        - actualizarÚltimaDirección() : void
+        + tienePowerPellet() : boolean
+    }
+    class Pinky {
+    }
+    class Blinky {
+        + obtenerMejorDireccion() : String
+    }
+    class Clyde {
+    }
+    class Inky {
+    }
+    class Laberinto {
+        - mapa : int[][]
+        - cargarmapa(pathName : String) : void
+        + getValorMapa(fila : int, columna : int) : int
+        + cambiarValorA0(fila : int, columna : int) : int
+    }
+    class DetectorTeclas {
+        + dirección : String
+        + keyTyped(e : KeyEvent) : void
+    }
+    interface KeyListener {
+    }
+}
+
+package presentacion {
+    abstract class InterfazGrafica {
+        # panel : PanelDelJuego
+        + dibujar(g2 : Graphics2D) : void
+        + run() : void
+        + obtenerImagen() : void
+    }
+    abstract class InterfazGraficaDeFantasma {
+    }
+    class InterfazGraficaDeBlinky {
+    }
+    class InterfazGraficaDeInky {
+    }
+    class InterfazGraficaDePinky {
+    }
+    class InterfazGraficaDeClyde {
+    }
+    class InterfazGraficaDeJugador {
+    }
+    class InterfazGraficaDelMarco {
+    }
+    class InterfazGraficaDeLaberinto {
+    }
+    class Pacman {
+    }
+    class PanelDelMenu{
+    + colocarBotonos() : void
+    + colocarEtiquetas() : void
+    }
+    class Nivel {
+    - completado: boolean
+    + iniciarNivel() : void
+    }
+    class PanelDelJuego {
+        + comenzarHilosDeProcesamiento() : void
+    }
+}
+
+InterfazGrafica ..|> Runnable
+InterfazGraficaDeFantasma --|> InterfazGrafica
+InterfazGraficaDelMarco --|> InterfazGrafica
+InterfazGraficaDeBlinky --|> InterfazGraficaDeFantasma
+InterfazGraficaDeClyde --|> InterfazGraficaDeFantasma
+InterfazGraficaDeInky --|> InterfazGraficaDeFantasma
+InterfazGraficaDePinky --|> InterfazGraficaDeFantasma
+InterfazGraficaDeJugador --|> InterfazGrafica
+InterfazGraficaDeLaberinto --|> InterfazGrafica
+
+presentacion ..> logica
+PanelDelJuego --> "*" InterfazGrafica
+Pacman --> PanelDelMenu
+PanelDelMenu -->"3" Nivel : niveles
+Nivel --> PanelDelJuego
+
+Blinky --|> Fantasma
+Pinky --|> Fantasma
+Inky --|> Fantasma
+Clyde --|> Fantasma
+Fantasma --> "1" Jugador : jugador
+
+
+Personaje --> Laberinto
+Personaje ..|> Runnable
+Jugador --|> Personaje
+Jugador --> "1" DetectorTeclas : controles
+DetectorTeclas ..|> KeyListener
+Fantasma --|> Personaje
+
+@enduml

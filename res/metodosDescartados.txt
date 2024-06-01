@@ -1,0 +1,58 @@
+metodos quiza utiles
+
+    public int obtenerColisionArriba(int posicionX, int posicionY, Entidad entidad) {
+        if (estaColisionando(entidad)) {
+            return posicionY;
+        }
+        do {
+            entidad.aumentarPosiciónY(-1);
+        } while (!estaColisionando(entidad));
+        return entidad.getPosiciónY() + 1;
+    }
+
+    public int obtenerColisionAbajo(int posicionX, int posicionY, Entidad entidad) {
+        if (estaColisionando(entidad)) {
+            return posicionY;
+        }
+        do {
+            entidad.aumentarPosiciónY(1);
+        } while (!estaColisionando(entidad));
+        return entidad.getPosiciónY() - 1;
+    }
+
+    public int obtenerColisionDerecha(int posicionX, int posicionY, Entidad entidad) {
+        if (estaColisionando(entidad)) {
+            return posicionX;
+        }
+        do {
+            entidad.aumentarPosiciónX(1);
+        } while (!estaColisionando(entidad));
+        return entidad.getPosiciónX() - 1;
+    }
+
+    public int obtenerColisionIzquierda(int posicionX, int posicionY, Entidad entidad) {
+        if (estaColisionando(entidad)) {
+            return posicionX;
+        }
+        do {
+            entidad.aumentarPosiciónX(-1);
+        } while (!estaColisionando(entidad));
+        return entidad.getPosiciónX() + 1;
+    }
+
+        //private void corregirColision(int posiciónX, int posiciónY) {
+        //    int tile_size = GamePanel.getTILE_SIZE();
+        //    if (posiciónY + 48 > 576) {
+        //        this.posiciónY = 528;
+        //    }
+        //    else if (posiciónY < 0) {
+        //        this.posiciónY = 0;
+        //    }
+        //    if (posiciónX + 48 > 768) {
+        //        this.posiciónX = 720;
+
+        //    }
+        //    else if (posiciónX < 0) {
+        //        this.posiciónX = 0;
+        //    }
+        //}

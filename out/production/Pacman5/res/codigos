@@ -1,0 +1,30 @@
+0 --> Vació
+2 --> Puntos
+3 --> PowerUps
+4 --> Fruta
+5 --> TpDerecho
+6 --> TpIzquierdo
+7 --> SalidaFantasmas
+8 --> SalidaJugador
+9,10,11,12 --> LugarAllegarFantasmas
+13 --> CartelDeReady/You Died
+14 --> SalidaCajaFantasmas
+
+bloques:
+1 --> (normal x)
+15 --> (normal y)
+16 ---> arista is
+17 --> arista de
+18 --> arista abajo i
+19 -- > arista abajo d
+esquina:
+20 --> derecha
+21 --> izquierda
+22 --> abajo
+23 --> arriba
+
+sin el lado de:
+24 --> arriba
+25 --> abajo
+26 -> izquierda
+27 --> derecha

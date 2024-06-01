@@ -1,0 +1,161 @@
+@startuml
+
+package logica {
+    abstract class Personaje {
+        # posiciónX : int
+        # posiciónY : int
+        # dirección : String
+        # direcciónImagen : String
+        + actualizar() : void
+        + run() : void
+        + estaColisionando() : boolean
+        + sePuedeMover(direcciónNueva : String) : boolean
+        + direcciónEsContraria(direcciónActual : String, direcciónNueva : String) : boolean
+        + moverse(dirección : String, velocidad : int) : void
+        + estaAlineado() : boolean
+    }
+    abstract class Fantasma {
+        # direcciónAnterior : String
+        # VELOCIDAD_HUIDA : int
+        + perseguir() : void
+        + huir() : void
+        + obtenerMejorDireccion(columna : String, fila : String) : Tecla
+        + obtenerDirecciónRandom(direcciónAnterior : Tecla) : Tecla
+        - obtenerMejorDireccionHuida() : Tecla
+        # estaColisionandoConJugador() : boolean
+        + {abstract} moverPorPersonalidad() : void
+    }
+    class Jugador {
+        - últimaDirección : String
+        - puntaje : int
+        - powerPellet : boolean
+        - DURACIÓN_POWER_PELLET : int
+        - obtenerItem() : void
+        - obtenerMovimiento() : String
+        - actualizarÚltimaDirección() : void
+        + tienePowerPellet() : boolean
+    }
+    class Pinky {
+    }
+    class Blinky {
+    }
+    class Clyde {
+    }
+    class Inky {
+    }
+    class Laberinto {
+        - mapa : int[][]
+        - cargarmapa(pathName : String) : void
+        + getValorMapa(fila : int, columna : int) : int
+        + cambiarValorA0(fila : int, columna : int) : int
+    }
+    class DetectorTeclas {
+        + dirección : String
+        + keyTyped(e : KeyEvent) : void
+    }
+    class Nivel {
+    }
+    class PacMan {
+    }
+    enum Dificultad {
+        FACIL,
+        MEDIA,
+        DIFICIL,
+        IMPOSIBLE
+    }
+    enum Tecla {
+        ARRIBA,
+        ABAJO,
+        DERECHA,
+        IZQUIERDA
+    }
+    enum Item {
+        PAC_DOT,
+        POWER_PELLET,
+        FRUTA
+    }
+}
+
+package presentacion {
+    abstract class InterfazGrafica {
+        # panel : PanelDelJuego
+        + dibujar(g2 : Graphics2D) : void
+        + run() : void
+        + obtenerImagen() : void
+    }
+    abstract class InterfazGraficaDeFantasma {
+    }
+    class InterfazGraficaDeBlinky {
+    }
+    class InterfazGraficaDeInky {
+    }
+    class InterfazGraficaDePinky {
+    }
+    class InterfazGraficaDeClyde {
+    }
+    class InterfazGraficaDeJugador {
+    }
+    class InterfazGraficaDelMarco {
+    }
+    class InterfazGraficaDeLaberinto {
+    }
+    class MenuPacMan {
+        + colocarBotonos() : void
+        + colocarEtiquetas() : void
+    }
+    class ContenedorPacMan {
+    }
+    class Puntuacion {
+    }
+    class Sonido {
+    }
+    enum Sonidos {
+        MENU,
+        MUERTE,
+        PARTIDA,
+        INICIO_PARTIDA,
+        POWER_UP
+    }
+}
+
+interface Runnable
+interface KeyListener
+
+'Relaciones entre paquetes
+presentacion ..> logica
+
+'Relaciones paquete logica
+Blinky --|> Fantasma
+Pinky --|> Fantasma
+Inky --|> Fantasma
+Clyde --|> Fantasma
+Fantasma --> "1" Jugador : jugador
+Personaje --> Laberinto
+Personaje --> "1" Tecla : dirección
+Personaje ..|> Runnable
+Jugador --> "1" DetectorTeclas : controles
+Jugador --|> Personaje
+Fantasma --|> Personaje
+DetectorTeclas ..|> KeyListener
+Nivel --> "1" Jugador : jugador
+Nivel --> "4" Fantasma : fantasmas
+Nivel --> "1" Laberinto : laberinto
+Nivel -> Dificultad
+PacMan --> "*" Nivel : niveles
+
+'Relaciones paquete presentacion
+InterfazGraficaDeFantasma --|> InterfazGrafica
+InterfazGraficaDelMarco --|> InterfazGrafica
+InterfazGraficaDeBlinky --|> InterfazGraficaDeFantasma
+InterfazGraficaDeClyde --|> InterfazGraficaDeFantasma
+InterfazGraficaDeInky --|> InterfazGraficaDeFantasma
+InterfazGraficaDePinky --|> InterfazGraficaDeFantasma
+InterfazGraficaDeJugador --|> InterfazGrafica
+InterfazGraficaDeLaberinto --|> InterfazGrafica
+InterfazGraficaDeLaberinto .|> Runnable
+MenuPacMan --> "1" Puntuacion
+MenuPacMan --> "*" InterfazGrafica
+MenuPacMan --> "1" ContenedorPacMan
+MenuPacMan --> "1" Sonido
+
+@enduml
